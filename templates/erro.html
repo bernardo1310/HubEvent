@@ -1,0 +1,10 @@
+{% extends "base.html" %}
+{% block title %}Erro {{ codigo }} - HubEvent{% endblock %}
+
+{% block content %}
+<div class="container text-center py-5">
+    <h1 class="display-3 fw-bold text-primary">{{ codigo }}</h1>
+    <p class="lead">{{ mensagem }}</p>
+    <a href="{{ url_for('eventos.index') }}" class="btn btn-hubevent mt-3"><i class="bi bi-house"></i> Voltar ao início</a>
+</div>
+{% endblock %}

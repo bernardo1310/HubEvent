@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+{% block title %}Eventos - HubEvent{% endblock %}
+
+{% block content %}
+<div class="container">
+    <h2 class="h4 mb-4"><i class="bi bi-calendar3"></i> Todos os eventos</h2>
+
+    {% if erro %}<div class="alert alert-danger">{{ erro }}</div>{% endif %}
+
+    <div class="row g-4">
+        {% for evento in eventos %}
+        <div class="col-sm-6 col-lg-4">
+            <div class="card evento-card">
+                {% if evento.imagemUrl %}
+                <img src="{{ evento.imagemUrl }}" class="card-img-top" alt="{{ evento.nome }}">
+                {% else %}
+                <div class="card-img-top d-flex align-items-center justify-content-center text-muted">
+                    <i class="bi bi-image display-4"></i>
+                </div>
+                {% endif %}
+                <div class="card-body d-flex flex-column">
+                    <h5 class="card-title">{{ evento.nome }}</h5>
+                    <p class="card-text text-muted small mb-1"><i class="bi bi-geo-alt"></i> {{ evento.local }}</p>
+                    <p class="card-text text-muted small mb-2"><i class="bi bi-calendar-event"></i> {{ evento.data }} às {{ evento.horario }}</p>
+                    <div class="d-flex justify-content-between align-items-center mt-auto">
+                        <span class="fw-bold text-primary">R$ {{ evento.valor }}</span>
+                        <a href="{{ url_for('eventos.detalhe', id_evento=evento.idEvento) }}" class="btn btn-hubevent btn-sm">Ver detalhes</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% else %}
+        <div class="col-12"><div class="alert alert-info">Nenhum evento cadastrado.</div></div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

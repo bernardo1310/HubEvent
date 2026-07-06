@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+{% block title %}Validação de entrada - HubEvent{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card shadow-sm border-0 rounded-4">
+                <div class="card-body text-center">
+                    <h3 class="fw-bold mb-3"><i class="bi bi-shield-check"></i> Validação facial de entrada</h3>
+                    <p class="text-muted">Tire uma nova selfie para validar sua entrada no evento. A imagem será comparada com a biometria cadastrada (similaridade mínima exigida: 95%).</p>
+
+                    <img id="selfie-preview" class="selfie-preview mb-3 d-none" alt="Pré-visualização da selfie">
+
+                    <form method="POST" enctype="multipart/form-data">
+                        {{ form.hidden_tag() }}
+                        <div class="mb-3">
+                            {{ form.selfie(class="form-control") }}
+                            {% for erro in form.selfie.errors %}<div class="text-danger small">{{ erro }}</div>{% endfor %}
+                        </div>
+                        <button type="submit" class="btn btn-hubevent w-100"><i class="bi bi-camera"></i> Validar entrada</button>
+                    </form>
+
+                    {% if resultado %}
+                    <div class="alert mt-4 {{ 'alert-success' if resultado.autorizado else 'alert-danger' }}">
+                        {% if resultado.autorizado %}
+                            <i class="bi bi-check-circle-fill"></i> <strong>Entrada autorizada!</strong><br>
+                            Bem-vindo(a), {{ resultado.nome_usuario }}. Similaridade: {{ "%.2f"|format(resultado.similarity) }}%
+                        {% else %}
+                            <i class="bi bi-x-circle-fill"></i> <strong>Entrada negada.</strong><br>
+                            {{ resultado.motivo }}
+                            {% if resultado.similarity %} (similaridade: {{ "%.2f"|format(resultado.similarity) }}%){% endif %}
+                        {% endif %}
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

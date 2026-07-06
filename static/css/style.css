@@ -1,0 +1,112 @@
+/* static/css/style.css - Estilo customizado do HubEvent (não utiliza temas prontos) */
+
+:root {
+    --hub-primary: #4b2ee0;
+    --hub-primary-dark: #341fa6;
+    --hub-accent: #ff6f61;
+    --hub-bg: #f7f7fb;
+    --hub-dark: #1c1c2b;
+}
+
+body {
+    background-color: var(--hub-bg);
+    font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+    color: var(--hub-dark);
+}
+
+/* --- Navbar --- */
+.hubevent-navbar {
+    background: linear-gradient(90deg, var(--hub-primary) 0%, var(--hub-primary-dark) 100%);
+}
+
+.btn-hubevent {
+    background-color: var(--hub-accent);
+    border: none;
+    color: #fff;
+    font-weight: 600;
+}
+.btn-hubevent:hover {
+    background-color: #e85c4f;
+    color: #fff;
+}
+
+/* --- Banner / Hero --- */
+.hero-banner {
+    background: linear-gradient(120deg, var(--hub-primary) 0%, #7c4dff 100%);
+    color: #fff;
+    border-radius: 1rem;
+    padding: 3rem 2rem;
+    margin-bottom: 2rem;
+}
+
+/* --- Cards de evento --- */
+.evento-card {
+    border: none;
+    border-radius: 0.9rem;
+    overflow: hidden;
+    box-shadow: 0 4px 14px rgba(28, 28, 43, 0.08);
+    transition: transform 0.15s ease, box-shadow 0.15s ease;
+    height: 100%;
+}
+.evento-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 10px 24px rgba(28, 28, 43, 0.14);
+}
+.evento-card .card-img-top {
+    height: 180px;
+    object-fit: cover;
+    background-color: #e4e2f5;
+}
+
+/* --- Sidebar administrativa --- */
+.admin-sidebar {
+    background-color: var(--hub-dark);
+    color: #fff;
+    min-height: calc(100vh - 56px);
+    padding-top: 1.5rem;
+}
+.admin-sidebar a {
+    color: #d8d6f0;
+    display: block;
+    padding: 0.6rem 1.2rem;
+    text-decoration: none;
+    border-left: 3px solid transparent;
+}
+.admin-sidebar a:hover,
+.admin-sidebar a.active {
+    background-color: rgba(255, 255, 255, 0.08);
+    border-left: 3px solid var(--hub-accent);
+    color: #fff;
+}
+
+.stat-card {
+    border-radius: 0.9rem;
+    color: #fff;
+    padding: 1.5rem;
+}
+.stat-card.bg-1 { background: linear-gradient(135deg, #4b2ee0, #7c4dff); }
+.stat-card.bg-2 { background: linear-gradient(135deg, #ff6f61, #ff9068); }
+.stat-card.bg-3 { background: linear-gradient(135deg, #10b981, #34d399); }
+.stat-card.bg-4 { background: linear-gradient(135deg, #0ea5e9, #38bdf8); }
+
+/* --- Biometria --- */
+.selfie-preview {
+    width: 220px;
+    height: 220px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 4px solid var(--hub-primary);
+    margin: 0 auto;
+    display: block;
+    background-color: #eee;
+}
+
+.status-badge {
+    font-size: 0.8rem;
+    padding: 0.4em 0.8em;
+}
+
+footer.hubevent-footer {
+    background-color: var(--hub-dark);
+    color: #cfcde8;
+}

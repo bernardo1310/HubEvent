@@ -1,0 +1,51 @@
+{% extends "base.html" %}
+{% block title %}Criar conta - HubEvent{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card shadow-sm border-0 rounded-4 p-2">
+                <div class="card-body">
+                    <h3 class="fw-bold text-center mb-4"><i class="bi bi-person-plus"></i> Criar conta</h3>
+                    <p class="text-muted text-center small">O cadastro biométrico será feito somente após a compra de um ingresso.</p>
+
+                    <form method="POST" novalidate>
+                        {{ form.hidden_tag() }}
+
+                        <div class="mb-3">
+                            {{ form.nome.label(class="form-label") }}
+                            {{ form.nome(class="form-control", placeholder="Seu nome completo") }}
+                            {% for erro in form.nome.errors %}<div class="text-danger small">{{ erro }}</div>{% endfor %}
+                        </div>
+
+                        <div class="mb-3">
+                            {{ form.email.label(class="form-label") }}
+                            {{ form.email(class="form-control", placeholder="seu@email.com") }}
+                            {% for erro in form.email.errors %}<div class="text-danger small">{{ erro }}</div>{% endfor %}
+                        </div>
+
+                        <div class="mb-3">
+                            {{ form.senha.label(class="form-label") }}
+                            {{ form.senha(class="form-control", placeholder="Mínimo 6 caracteres") }}
+                            {% for erro in form.senha.errors %}<div class="text-danger small">{{ erro }}</div>{% endfor %}
+                        </div>
+
+                        <div class="mb-3">
+                            {{ form.confirmar_senha.label(class="form-label") }}
+                            {{ form.confirmar_senha(class="form-control") }}
+                            {% for erro in form.confirmar_senha.errors %}<div class="text-danger small">{{ erro }}</div>{% endfor %}
+                        </div>
+
+                        <button type="submit" class="btn btn-hubevent w-100">Criar conta</button>
+                    </form>
+
+                    <p class="text-center mt-3 mb-0 small">
+                        Já tem uma conta? <a href="{{ url_for('auth.login') }}">Entrar</a>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+{% block title %}Confirmar compra - HubEvent{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card shadow-sm border-0 rounded-4">
+                <div class="card-body">
+                    <h3 class="fw-bold mb-3"><i class="bi bi-bag-check"></i> Confirmar compra</h3>
+
+                    <table class="table table-borderless">
+                        <tr><th>Evento</th><td>{{ evento.nome }}</td></tr>
+                        <tr><th>Local</th><td>{{ evento.local }}</td></tr>
+                        <tr><th>Data</th><td>{{ evento.data }} às {{ evento.horario }}</td></tr>
+                        <tr><th>Valor</th><td class="fw-bold text-primary">R$ {{ evento.valor }}</td></tr>
+                    </table>
+
+                    <div class="alert alert-info small">
+                        <i class="bi bi-info-circle"></i> Após confirmar, você será direcionado ao cadastro biométrico facial, necessário para a entrada no evento.
+                    </div>
+
+                    <form method="POST" action="{{ url_for('ingressos.confirmar_compra', id_evento=evento.idEvento) }}">
+                        <button type="submit" class="btn btn-hubevent w-100"><i class="bi bi-check2-circle"></i> Confirmar compra</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

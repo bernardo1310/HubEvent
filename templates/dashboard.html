@@ -1,0 +1,48 @@
+{% extends "base.html" %}
+{% block title %}Meus ingressos - HubEvent{% endblock %}
+
+{% block content %}
+<div class="container">
+    <h2 class="h4 mb-4"><i class="bi bi-ticket-detailed"></i> Meus ingressos</h2>
+
+    <div class="table-responsive">
+        <table class="table table-hover align-middle bg-white rounded-4 shadow-sm">
+            <thead>
+                <tr>
+                    <th>Evento</th>
+                    <th>Data</th>
+                    <th>Status</th>
+                    <th>Ação</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for ingresso in ingressos %}
+                <tr>
+                    <td>{{ ingresso.evento.nome if ingresso.evento else "Evento removido" }}</td>
+                    <td>{{ ingresso.evento.data if ingresso.evento else "-" }}</td>
+                    <td>
+                        {% set status = ingresso.status %}
+                        <span class="badge status-badge
+                            {% if status == 'Aguardando biometria' %}bg-warning text-dark
+                            {% elif status == 'Biometria cadastrada' %}bg-info text-dark
+                            {% elif status == 'Entrada autorizada' %}bg-success
+                            {% else %}bg-danger{% endif %}">
+                            {{ status }}
+                        </span>
+                    </td>
+                    <td>
+                        {% if status == 'Aguardando biometria' %}
+                        <a href="{{ url_for('biometria.cadastro', id_ingresso=ingresso.idIngresso) }}" class="btn btn-hubevent btn-sm">Cadastrar biometria</a>
+                        {% else %}
+                        <span class="text-muted small">—</span>
+                        {% endif %}
+                    </td>
+                </tr>
+                {% else %}
+                <tr><td colspan="4" class="text-center text-muted py-4">Você ainda não comprou nenhum ingresso.</td></tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

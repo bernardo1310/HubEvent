@@ -1,0 +1,178 @@
+{% extends "base.html" %}
+{% block title %}Painel Administrativo - HubEvent{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+    <div class="row">
+        <!-- Sidebar administrativa -->
+        <div class="col-lg-2 admin-sidebar">
+            <a href="{{ url_for('admin.dashboard') }}" class="{{ 'active' if secao == 'dashboard' }}"><i class="bi bi-speedometer2"></i> Dashboard</a>
+            <a href="{{ url_for('admin.eventos') }}" class="{{ 'active' if secao in ['eventos','novo_evento','editar_evento'] }}"><i class="bi bi-calendar-event"></i> Eventos</a>
+            <a href="{{ url_for('admin.usuarios') }}" class="{{ 'active' if secao == 'usuarios' }}"><i class="bi bi-people"></i> Usuários</a>
+            <a href="{{ url_for('admin.ingressos') }}" class="{{ 'active' if secao == 'ingressos' }}"><i class="bi bi-ticket-perforated"></i> Ingressos</a>
+        </div>
+
+        <!-- Conteúdo principal -->
+        <div class="col-lg-10 py-4">
+
+            {% if secao == 'dashboard' %}
+                <h2 class="h4 mb-4">Dashboard</h2>
+                <div class="row g-3">
+                    <div class="col-md-3">
+                        <div class="stat-card bg-1">
+                            <div class="small">Usuários cadastrados</div>
+                            <div class="display-6 fw-bold">{{ estatisticas.total_usuarios }}</div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="stat-card bg-2">
+                            <div class="small">Eventos</div>
+                            <div class="display-6 fw-bold">{{ estatisticas.total_eventos }}</div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="stat-card bg-3">
+                            <div class="small">Ingressos vendidos</div>
+                            <div class="display-6 fw-bold">{{ estatisticas.total_ingressos }}</div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="stat-card bg-4">
+                            <div class="small">Validações realizadas</div>
+                            <div class="display-6 fw-bold">{{ estatisticas.total_validacoes }}</div>
+                        </div>
+                    </div>
+                </div>
+
+            {% elif secao == 'eventos' %}
+                <div class="d-flex justify-content-between align-items-center mb-4">
+                    <h2 class="h4 mb-0">Eventos</h2>
+                    <a href="{{ url_for('admin.novo_evento') }}" class="btn btn-hubevent"><i class="bi bi-plus-lg"></i> Novo evento</a>
+                </div>
+                <div class="table-responsive">
+                    <table class="table table-hover bg-white rounded-4 shadow-sm">
+                        <thead><tr><th>Nome</th><th>Local</th><th>Data</th><th>Valor</th><th>Ações</th></tr></thead>
+                        <tbody>
+                        {% for evento in eventos %}
+                            <tr>
+                                <td>{{ evento.nome }}</td>
+                                <td>{{ evento.local }}</td>
+                                <td>{{ evento.data }} {{ evento.horario }}</td>
+                                <td>R$ {{ evento.valor }}</td>
+                                <td>
+                                    <a href="{{ url_for('admin.editar_evento', id_evento=evento.idEvento) }}" class="btn btn-sm btn-outline-secondary"><i class="bi bi-pencil"></i></a>
+                                    <form method="POST" action="{{ url_for('admin.excluir_evento', id_evento=evento.idEvento) }}" class="d-inline" onsubmit="return confirm('Excluir este evento?');">
+                                        <button type="submit" class="btn btn-sm btn-outline-danger"><i class="bi bi-trash"></i></button>
+                                    </form>
+                                </td>
+                            </tr>
+                        {% else %}
+                            <tr><td colspan="5" class="text-center text-muted py-4">Nenhum evento cadastrado.</td></tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+
+            {% elif secao in ['novo_evento', 'editar_evento'] %}
+                <h2 class="h4 mb-4">{{ 'Novo evento' if secao == 'novo_evento' else 'Editar evento' }}</h2>
+                <div class="card border-0 shadow-sm rounded-4">
+                    <div class="card-body">
+                        <form method="POST" enctype="multipart/form-data">
+                            {{ form.hidden_tag() }}
+                            <div class="row g-3">
+                                <div class="col-md-6">
+                                    {{ form.nome.label(class="form-label") }}
+                                    {{ form.nome(class="form-control") }}
+                                </div>
+                                <div class="col-md-6">
+                                    {{ form.local.label(class="form-label") }}
+                                    {{ form.local(class="form-control") }}
+                                </div>
+                                <div class="col-md-4">
+                                    {{ form.data.label(class="form-label") }}
+                                    {{ form.data(class="form-control") }}
+                                </div>
+                                <div class="col-md-4">
+                                    {{ form.horario.label(class="form-label") }}
+                                    {{ form.horario(class="form-control") }}
+                                </div>
+                                <div class="col-md-4">
+                                    {{ form.valor.label(class="form-label") }}
+                                    {{ form.valor(class="form-control") }}
+                                </div>
+                                <div class="col-12">
+                                    {{ form.descricao.label(class="form-label") }}
+                                    {{ form.descricao(class="form-control", rows=4) }}
+                                </div>
+                                <div class="col-12">
+                                    {{ form.imagem.label(class="form-label") }}
+                                    {{ form.imagem(class="form-control") }}
+                                    <img id="imagem-preview" class="img-fluid rounded-3 mt-2 d-none" style="max-height:200px;">
+                                </div>
+                            </div>
+                            <button type="submit" class="btn btn-hubevent mt-4"><i class="bi bi-check2"></i> Salvar evento</button>
+                        </form>
+                    </div>
+                </div>
+
+            {% elif secao == 'usuarios' %}
+                <h2 class="h4 mb-4">Usuários</h2>
+                <div class="table-responsive">
+                    <table class="table table-hover bg-white rounded-4 shadow-sm">
+                        <thead><tr><th>Nome</th><th>E-mail</th><th>Biometria</th><th>Ingressos</th></tr></thead>
+                        <tbody>
+                        {% for usuario in usuarios %}
+                            <tr>
+                                <td>{{ usuario.nome }}</td>
+                                <td>{{ usuario.email }}</td>
+                                <td>
+                                    {% if usuario.biometriaCadastrada %}
+                                        <span class="badge bg-success status-badge">Cadastrada</span>
+                                    {% else %}
+                                        <span class="badge bg-secondary status-badge">Não cadastrada</span>
+                                    {% endif %}
+                                </td>
+                                <td>{{ usuario.ingressos|length }}</td>
+                            </tr>
+                        {% else %}
+                            <tr><td colspan="4" class="text-center text-muted py-4">Nenhum usuário cadastrado.</td></tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+
+            {% elif secao == 'ingressos' %}
+                <h2 class="h4 mb-4">Ingressos</h2>
+                <div class="table-responsive">
+                    <table class="table table-hover bg-white rounded-4 shadow-sm">
+                        <thead><tr><th>Comprador</th><th>Evento</th><th>Data compra</th><th>Status</th><th>Biometria</th></tr></thead>
+                        <tbody>
+                        {% for ingresso in ingressos %}
+                            <tr>
+                                <td>{{ ingresso.usuario.nome if ingresso.usuario else "-" }}</td>
+                                <td>{{ ingresso.evento.nome if ingresso.evento else "-" }}</td>
+                                <td>{{ ingresso.comprEm[:10] if ingresso.comprEm else "-" }}</td>
+                                <td>
+                                    {% set status = ingresso.status %}
+                                    <span class="badge status-badge
+                                        {% if status == 'Aguardando biometria' %}bg-warning text-dark
+                                        {% elif status == 'Biometria cadastrada' %}bg-info text-dark
+                                        {% elif status == 'Entrada autorizada' %}bg-success
+                                        {% else %}bg-danger{% endif %}">
+                                        {{ status }}
+                                    </span>
+                                </td>
+                                <td>{{ ingresso.faceId or "-" }}</td>
+                            </tr>
+                        {% else %}
+                            <tr><td colspan="5" class="text-center text-muted py-4">Nenhum ingresso registrado.</td></tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            {% endif %}
+
+        </div>
+    </div>
+</div>
+{% endblock %}
